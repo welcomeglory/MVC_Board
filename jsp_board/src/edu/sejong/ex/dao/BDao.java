@@ -14,7 +14,6 @@ import javax.sql.DataSource;
 import edu.sejong.ex.dto.BDto;
 
 public class BDao {
-
 	// 커넥션 풀 객체
 	private DataSource dataSource = null;
 
@@ -36,6 +35,7 @@ public class BDao {
 		ResultSet rs = null;
 
 		try {
+			//bgroup 원본 정렬 먼저 그 다음에 bstep로 정렬
 			String sql = "select * from mvc_board order by bgroup desc, bstep asc";
 			conn = dataSource.getConnection();
 			psmt = conn.prepareStatement(sql);
@@ -237,7 +237,7 @@ public class BDao {
 				psmt.setInt(1, Integer.valueOf(bid));
 
 				rs = psmt.executeQuery();
-
+				
 				if (rs.next()) {
 					int id = rs.getInt("bid");
 					String bname = rs.getString("bname");
@@ -341,6 +341,37 @@ public class BDao {
 		}
 		return;	
 		
+	}
+	public void uphit(String bid) {
+
+		Connection conn = null;
+		PreparedStatement psmt = null;
+
+		try {
+
+			String sql = "update mvc_board set  bhit=bhit+1 where bid=?";
+
+			conn = dataSource.getConnection();
+			psmt = conn.prepareStatement(sql);
+
+			psmt.setInt(1, Integer.valueOf(bid));
+			
+			int rn = psmt.executeUpdate();
+
+			System.out.println("uphit 된 갯수" + rn);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (psmt != null)
+					psmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return;
 	}
 
 }
