@@ -13,13 +13,15 @@ public class BContentCommand implements BCommand {
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		//http://localhost:8282/jsp_hjs_board/content_view.do?bid=21		
 		String bid = request.getParameter("bid");
-		
+				
 		BDao dao = new BDao();
-		
-		BDto board = dao.contentView(bid);
-		
-		request.setAttribute("content_view", board);
 
+		dao.uphit(bid);
+		
+		BDto board = dao.contentView(bid);		
+		
+		request.setAttribute("content_view", board);		
+		
 	}
 
 }
