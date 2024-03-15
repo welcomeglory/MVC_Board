@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import edu.sejong.game.command.board.BoardModifyCommand;
+import edu.sejong.game.command.board.BoardUpdateCommand;
+import edu.sejong.game.command.Command;
+import edu.sejong.game.command.board.BoardContentCommand;
 import edu.sejong.game.command.board.BoardDeleteCommand;
 import edu.sejong.game.command.board.BoardListCommand;
-import edu.sejong.game.command.board.Command;
 
 @WebServlet("/board/*")
 public class BoardController extends HttpServlet {
@@ -70,12 +71,19 @@ public class BoardController extends HttpServlet {
 		    command = new BoardDeleteCommand();
 	         command.excuete(request, response);
 		    viewPage = "/board/list.do";
-		} else if (commandDo.equals("/board/modify.do")) {
-		    // 게시글 수정을 처리하는 BModifyCommand 객체 생성
-		    command = new BoardModifyCommand();
-	         command.excuete(request, response);
-		    viewPage = "/board/list.do";
-		}
+		} 
+      else if(commandDo.equals("/board/update_view.do")){
+          //<a href="${pageContext.request.contextPath}/board/update_view.do?bid=${board.bid}">${board.btitle}</a>
+          command = new BoardContentCommand();
+          command.excuete(request, response);          
+          viewPage = "/board_update.jsp";
+       }else if(commandDo.equals("/board/update.do")){
+           
+           command = new BoardUpdateCommand();
+           command.excuete(request, response);
+           
+           viewPage = "/board/list.do";
+        }
       
       RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
       dispatcher.forward(request, response);
